@@ -5,23 +5,25 @@
 		cacheStorageScope = "request";
 
 		function init(any object, errorOnUndefined="false"){
-			//getCache();
-			structAppend(variables,arguments);
 			variables.UNDEFINED_PROPERTY_DEFAULT = "__$$UNDEFINED$$__";
-			variables.builtinComponentPropertyList = ["ACCESSORS","EXTENDS","FULLNAME","FUNCTIONS","NAME","PATH","PROPERTIES","TYPE"];
-			var md = getMetadata(object);
+			structAppend(variables,arguments);
+
+			//we do this so the getters don't have to look in the cache all the time
+			structAppend(variables, _getMetadata());
+
+			//mix-in a back door to the object under inspection so we can get at its variables
+			object._getVariables = this._getVariables;
+			variables.objectVariables = object._getVariables();
+		}
+
+		private function _getMetadata(){
+			var md = getMetadata(variables.object);
 			var result = getFromCache(md.name);
 			if(structIsEmpty(result)){
 				result = flattenProperties();
 				addToCache(md.name,result);
 			}
-
-			variables.componentAnnotations = result.componentAnnotations;
-			variables.flattenedProperties = result.properties;
-
-
-			object._getVariables = this._getVariables;
-			variables.objectVariables = object._getVariables();
+			return result;
 		}
 
 		//a function we'll mix in to the object
@@ -53,9 +55,7 @@
 				}
 				//get component annotations
 				for(annotation in metadata){
-					if(NOT arrayFindNoCase(variables.builtinComponentPropertyList,annotation)
-						AND NOT StructKeyExists(annotations,annotation)
-					){
+					if(NOT StructKeyExists(annotations,annotation)){
 						annotations[annotation] = metadata[annotation];
 					}
 				}
@@ -96,7 +96,7 @@
 			if(NOT variables.errorOnUndefined){
 				return "";
 			}
-			throw(type="AnnotationDoesNotExist",message="Property value [#arguments.name#] has not been defined and initialized");
+			throw(type="PropertyDoesNotExist",message="Property value [#arguments.name#] has not been defined and initialized");
 		}
 
 		public function getInspectedVariables(){
@@ -123,6 +123,7 @@
 			return value;
 		}
 
+		//don't ask
 		private function deriveVariableValueFromPropertyDefinition(name){
 			if(
 				NOT structKeyExists(flattenedProperties,"default")
