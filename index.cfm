@@ -6,6 +6,7 @@ components = [];
 startTS = getTickCount();
 for(i=1; i LTE loopcount; i++){
 	components[i] = new ChildComponent();
+	components[i].setSomeString("hi mom, it's #now()#");
 }
 totalCreateTS = getTickCount()-startTS;
 
@@ -31,6 +32,7 @@ totalInspectorCreate = getTickCount()-startTS;
 
 
 childOne = new ChildComponent();
+childOne.setSomeString("hi mom, it's #now()#");
 childInspector = new Inspector(childOne);
 
 startTS = getTickCount();
@@ -40,6 +42,7 @@ for(i=1; i LTE loopcount; i++){
 totalInspector2Create = getTickCount()-startTS;
 
 childTwo = new ChildComponent();
+childTwo.setSomeString("hi mom, it's #now()#");
 childInspector2 = new Inspector2(childTwo);
 
 
@@ -60,7 +63,7 @@ childInspector2 = new Inspector2(childTwo);
 
 #totalInspectorCreate# ms to create metadata
 <br />
-#totalInspector2Create# ms to create metadata with nonrecursive inspector
+#totalInspector2Create# ms to create metadata with nonrecursive, caching inspector
 
 <br>
 
