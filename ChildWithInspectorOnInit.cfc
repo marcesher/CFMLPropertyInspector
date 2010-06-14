@@ -1,10 +1,10 @@
 component extends="ChildComponent" accessors="true"{
 
-	function init(propertyHelper=""){
-		if(isSimpleValue(arguments.propertyHelper)){
-			propertyHelper = new PropertyHelper();
+	function init(propertyBooster=""){
+		if(isSimpleValue(arguments.propertyBooster)){
+			propertyBooster = new propertyBooster();
 		}
-		variables.propertyMetadata = propertyHelper.inspect(this);
+		variables.propertyMetadata = propertyBooster.inspect(this);
 	}
 
 	function getPropertyMetadata(){

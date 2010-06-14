@@ -9,7 +9,7 @@ component accessors=true mongodb="somedb" mongocollection="somecollection"{
 	property name="SomeArray" default="" type="array" persistent="true" editable="false";
 	property name="SomeString2" default="" type="string" persistent="true" editable="true";
 	property name="SomeDate2" default="" type="date" persistent="true" editable="true";
-	property name="SomeNumber2" default="0" type="numeric" persistent="false" hidehint="true" editable="true";
+	property name="SomeNumber2" default="0" type="numeric" persistent="true" hidehint="true" editable="true";
 	property name="SomeBoolean2" default="true" type="string" persistent="true" editable="true";
 	property name="SomeComponent2" default="" type="ComposedComponent" persistent="true" editable="false";
 	property name="SomeStruct2" default="" type="struct" persistent="true" editable="false";
