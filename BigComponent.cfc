@@ -12,8 +12,12 @@ component accessors=true mongodb="somedb" mongocollection="somecollection"{
 	property name="SomeNumber2" default="0" type="numeric" persistent="true" hidehint="true" editable="true";
 	property name="SomeBoolean2" default="true" type="string" persistent="true" editable="true";
 	property name="SomeComponent2" default="" type="ComposedComponent" persistent="true" editable="false";
-	property name="SomeStruct2" default="" type="struct" persistent="true" editable="false";
-	property name="SomeArray2" default="" type="array" persistent="true" editable="false";
+	property name="SomeStruct2" default='{"vice":"scotch","vice2":"homebrew"}' type="struct" persistent="true" editable="false";
+	property name="SomeArray2" default='["cf","stogies","scotch","homebrew"]' type="array" persistent="true" editable="false";
+
+	function getVariables(){
+		return variables;
+	}
 
 }
 

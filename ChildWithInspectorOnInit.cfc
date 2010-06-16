@@ -5,6 +5,7 @@ component extends="ChildComponent" accessors="true"{
 			propertyBooster = new propertyBooster();
 		}
 		variables.propertyMetadata = propertyBooster.inspect(this);
+		structAppend(variables,propertyMetadata.defaultVariableValues);
 	}
 
 	function getPropertyMetadata(){
