@@ -7,8 +7,7 @@ component accessors="true"{
 	public function inspect(any object){
 		//mix-in a back door to the object under inspection so we can get at its variables
 		object._getVariables = this._getVariables;
-
-		//we do this so the getters don't have to look in the cache all the time
+		//inspect
 		return _getMetadata(object);
 	}
 
