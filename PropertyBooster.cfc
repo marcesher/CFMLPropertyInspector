@@ -76,9 +76,9 @@ component accessors="true"{
 		var defaultVariableValues = {};
 		var metadata = getMetadata(object);
 		var propertyName = "";
-		var properties = [];
 
 		while(structKeyExists(metadata,"extends")){
+			var properties = [];
 			//get properties
 			if(StructKeyExists(metadata,"properties")){
 				properties = metadata.properties;
