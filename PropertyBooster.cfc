@@ -1,8 +1,4 @@
 component accessors="true"{
-	property name="cacheStorageScope" type="string" default="request";
-	cacheName = "__propertyinspectorcache__";
-	cacheStorageScope = "request";//change this to server or application for fun bugs!
-
 
 	public function inspect(any object){
 		//mix-in a back door to the object under inspection so we can get at its variables
@@ -75,7 +71,6 @@ component accessors="true"{
 		var annotations = {};
 		var defaultVariableValues = {};
 		var metadata = getMetadata(object);
-		var propertyName = "";
 
 		while(structKeyExists(metadata,"extends")){
 			var properties = [];
@@ -85,7 +80,7 @@ component accessors="true"{
 			}
 			var propertiesCount = arrayLen(properties);
 			for(prop=1; prop <= propertiesCount; prop++){
-				propertyName = properties[prop].name;
+				var propertyName = properties[prop].name;
 				if(NOT structKeyExists(props,propertyName)){
 					properties[prop]["_sort_"] = counter;
 					props[propertyName] = properties[prop];
@@ -139,7 +134,8 @@ component accessors="true"{
 
 
 	public function getCache(){
-		return structGet("#cacheStorageScope#.#cacheName#");
+		//if you want fun bugs, try using a shared scope!
+		return structGet("request.__propertyinspectorcache__");
 	}
 
 	public function clearCache(){
