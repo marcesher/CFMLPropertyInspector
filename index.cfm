@@ -22,6 +22,9 @@ writeDump(var=childWithNoInspectorOnInit.getVariables(),expand="false",label="yo
 childWithInspectorOnInit = new childWithInspectorOnInit();
 writeDump(var=childWithInspectorOnInit.getVariables(),expand="false",label="supercharged component's variables, after init()");
 
+//same thing, but boosting "this" scope instead of the variables scope
+childWithInspectorOnInitBoostingThisScope = new childWithInspectorOnInitBoostingThisScope();
+writeDump(var=childWithInspectorOnInitBoostingThisScope.getVariables(),expand="false",label="supercharged component's this scope, after init()");
 
 
 /*microbenchmark component creation */

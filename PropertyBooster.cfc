@@ -2,7 +2,7 @@ component accessors="true"{
 
 	public function inspect(any object){
 		//mix-in a back door to the object under inspection so we can get at its variables
-		object._getVariables = this._getVariables;
+		//object._getVariables = this._getVariables;
 		//inspect
 		return _getMetadata(object);
 	}
@@ -98,15 +98,15 @@ component accessors="true"{
 			//to climb the tree
 			metadata = metadata.extends;
 		}
-		return {properties=props,componentAnnotations=annotations,defaultVariableValues=defaultVariableValues,propertiesWithKeys={}};
+		return {properties=props,componentAnnotations=annotations,propertiesWithKeys={},defaultVariableValues=defaultVariableValues};
 	}
 
 
 	//don't ask
 	private function deriveVariableValueFromPropertyDefinition(propStruct){
-
-		if(NOT structKeyExists(propStruct,"type")){
-			propStruct["type"] = "string";
+		var propertyType = "";
+		if(structKeyExists(propStruct,"type")){
+			propertyType = propStruct.type;
 		}
 		if(NOT structKeyExists(propStruct,"default")){
 			propStruct["default"] = "";
@@ -115,7 +115,7 @@ component accessors="true"{
 		//initialize variable values; NOTE: arrays and structs must use valid json syntax, eg:
 		//property name="SomeStruct2" default='{"vice":"scotch","vice2":"homebrew"}' type="struct" persistent="true" editable="false";
 		//property name="SomeArray2" default='["cf","stogies","scotch","homebrew"]' type="array" persistent="true" editable="false";
-		switch(propStruct.type){
+		switch(propertyType){
 			case "struct":
 				if(propStruct.default eq "") return {};
 				return deserializeJSON(propStruct.default);
@@ -132,6 +132,44 @@ component accessors="true"{
 		return propStruct.default;
 	}
 
+	public function isStringType(any object, string propertyName){
+		var thisProp = getObjectProperty(object, propertyName);
+		return (
+				NOT isObjectType(object, propertyName)
+				AND NOT isDateType(object, propertyName)
+				AND NOT isNumericType(object, propertyName)
+		);
+	}
+
+	public function isObjectType(any object, string propertyName){
+		return structKeyExists( getObjectProperty(object, propertyName) ,"CFC");
+	}
+
+	public function isDateType(any object, string propertyName){
+		var thisProp = getObjectProperty(object, propertyName);
+		var ormType = getOrmType(object, propertyName);
+		return findNoCase("date",  getPropType(thisProp) ) OR findNoCase("date", ormType) ;
+	}
+
+	public function isNumericType(any object, string propertyName){
+		var thisProp = getObjectProperty(object, propertyName);
+		var ormType = getOrmType(object, propertyName);
+		return findNoCase("numeric",  getPropType(thisProp) ) OR refindNoCase("int|integer|double|float|number|numeric", ormType);
+	}
+
+	public function getObjectProperty(any object, string propertyName){
+		return _getMetadata(object).properties[propertyName];
+	}
+
+	public function getOrmType(any object, string propertyName){
+		var thisProp = getObjectProperty(object, propertyName);
+		if(structKeyExists(thisProp,"ORMTYPE")) return thisProp.ORMTYPE;
+		return "";
+	}
+
+	public function getPropType(struct propertyDefinition, string defaultType=""){
+		return structKeyExists(propertyDefinition,"type") ? propertyDefinition.type : defaultType;
+	}
 
 	public function getCache(){
 		//if you want fun bugs, try using a shared scope!
@@ -149,6 +187,7 @@ component accessors="true"{
 		}
 		return {};
 	}
+
 	public function addToCache(name,value){
 		var cache = getCache();
 		cache[name] = value;

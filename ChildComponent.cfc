@@ -1,5 +1,5 @@
 <cfscript>
-component extends="BigComponent"{
+component extends="BigComponent" accessors="true"{
 	property name="Type" type="string" default="SomeType";
 }
 </cfscript>
