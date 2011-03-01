@@ -6,6 +6,7 @@ component accessors="true"{
 		//inspect
 		return _getMetadata(object);
 	}
+	
 
 	public function getPropertiesWithAttributes(any object, struct KeysAndValues){
 		var result = {};
